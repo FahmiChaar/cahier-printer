@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2B6A52">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="description" content="Redimensionnez une image au format du cahier, placez-la sur une feuille A4, puis imprimez ou exportez-la.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,131 +15,169 @@
 <title>Feuille pour cahier</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style id="pageStyle">@page{size:A4 portrait;margin:0}</style>
 <style>
 :root{
-  --panel:#FBFCFB;--ink:#1D2622;--muted:#56645E;--line:#DCE3DF;--field:#FFFFFF;
-  --accent:#2B6A52;--accent-ink:#FFFFFF;--accent-soft:#E3EFE9;--focus:#1E6FD9;--warn:#9A5B00;
-  --mat:#3A7A60;--mat-line:rgba(255,255,255,.10);--mat-line-strong:rgba(255,255,255,.22);
-  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --panel:#161D1A;--ink:#E3ECE7;--muted:#9BAAA3;--line:#2B3732;--field:#1E2824;
-    --accent:#62B592;--accent-ink:#0D1512;--accent-soft:#1F3129;--focus:#6BA6FF;--warn:#E7B45A;
-    --mat:#1F4537;--mat-line:rgba(255,255,255,.06);--mat-line-strong:rgba(255,255,255,.14);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --panel:#161D1A;--ink:#E3ECE7;--muted:#9BAAA3;--line:#2B3732;--field:#1E2824;
-  --accent:#62B592;--accent-ink:#0D1512;--accent-soft:#1F3129;--focus:#6BA6FF;--warn:#E7B45A;
-  --mat:#1F4537;--mat-line:rgba(255,255,255,.06);--mat-line-strong:rgba(255,255,255,.14);
-  color-scheme:dark;
+  --bg:#F5F7FA;--surface:#FFFFFF;--ink:#0F172A;--ink-2:#334155;--muted:#64748B;--line:#E2E8F0;--line-2:#CBD5E1;
+  --accent:#2563EB;--accent-hover:#1D4ED8;--accent-soft:#EFF4FF;--ring:rgba(37,99,235,.2);
+  --warn:#B45309;--warn-soft:#FFF7ED;--stage:#EDF0F4;--dot:#D3D9E1;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
-body{height:100%;margin:0;background:var(--panel);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45;overflow:hidden}
-.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"top" "stage" "panel" "nav"}
-.top{grid-area:top;padding:10px 12px;background:var(--panel);border-bottom:1px solid var(--line)}
-.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-.top h1{margin:0;font-size:1.05rem;line-height:1.2}
-.install{min-height:36px;padding:6px 12px;font-size:.85rem;flex:none}
+body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.app{position:fixed;inset:0;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);display:flex;flex-direction:column;background:var(--bg)}
+.top{flex:none;padding:12px 16px 10px;background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:2}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:28px;height:28px;border-radius:7px;flex:none}
+.brand h1{margin:0;font-size:1rem;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.install{min-height:34px;padding:5px 12px;font-size:.82rem}
 .install[hidden]{display:none}
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);transform:translateX(-50%);width:max-content;max-width:min(92vw,420px);padding:12px 14px;border-radius:10px;background:var(--ink);color:var(--panel);font-size:.9rem;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:10;cursor:pointer}
-.toast[hidden]{display:none}
-.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.tab{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:4px 6px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:inherit;font-size:.9rem;cursor:pointer;min-width:0}
-.tab .num{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;border:1.5px solid var(--muted);color:var(--muted)}
-.tab .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;min-height:50px;padding:0 4px;border:0;background:none;color:var(--muted);font:inherit;cursor:pointer}
+.tab::before{content:"";position:absolute;top:13px;right:calc(50% + 18px);width:calc(100% - 36px);height:2px;border-radius:2px;background:var(--line)}
+.tab:first-child::before{display:none}
+.tab.done::before,.tab[aria-selected="true"]::before{background:var(--accent)}
+.num{position:relative;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--surface);border:2px solid var(--line-2);font-size:.8rem;font-weight:600;color:var(--muted)}
+.tab[aria-selected="true"] .num{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px var(--accent-soft)}
 .tab.done .num{border-color:var(--accent);color:var(--accent)}
-.tab[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
-.tab[aria-selected="true"] .num{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.tab:disabled{opacity:.45;cursor:not-allowed}
-.stage{grid-area:stage;position:relative;min-height:200px;overflow:hidden;display:grid;place-items:center;background-color:var(--mat);background-image:linear-gradient(var(--mat-line-strong) 1px,transparent 1px),linear-gradient(90deg,var(--mat-line-strong) 1px,transparent 1px),linear-gradient(var(--mat-line) 1px,transparent 1px),linear-gradient(90deg,var(--mat-line) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;background-position:-1px -1px}
-.stage.over{box-shadow:inset 0 0 0 4px var(--focus)}
-.sheet{position:relative;box-shadow:0 1px 2px rgba(0,0,0,.25),0 12px 30px rgba(0,0,0,.28)}
-.sheet canvas{display:block;touch-action:none;cursor:default}
-.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center;color:#4A5751}
-.empty p{margin:0;max-width:22ch;font-size:.9rem}
+.tab.done .d{display:none}
+.tab.done .num::after{content:"";width:10px;height:5px;margin-top:-3px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg)}
+.lbl{font-size:.78rem;font-weight:500;white-space:nowrap}
+.tab[aria-selected="true"] .lbl{color:var(--ink);font-weight:600}
+.tab:disabled{cursor:not-allowed;opacity:.5}
+.stage{flex:1 1 auto;min-height:170px;padding:12px 12px 42px;position:relative;z-index:0;overflow:hidden;display:grid;place-items:center;background-color:var(--stage);background-image:radial-gradient(var(--dot) 1px,transparent 1.3px);background-size:16px 16px}
+.stage.over{box-shadow:inset 0 0 0 3px var(--accent)}
+.sheet{position:relative;background:#fff;box-shadow:0 0 0 1px rgba(15,23,42,.06),0 2px 4px rgba(15,23,42,.05),0 12px 28px rgba(15,23,42,.10)}
+.sheet canvas{display:block;touch-action:none}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;text-align:center;color:var(--muted)}
+.empty p{margin:0;max-width:22ch;font-size:.88rem}
 .empty[hidden]{display:none}
-.empty .btn{background:#2B6A52;border-color:#2B6A52;color:#fff}
-.readout{position:absolute;left:10px;bottom:8px;max-width:calc(100% - 20px);padding:4px 9px;border-radius:6px;background:rgba(0,0,0,.34);color:#fff;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty .btn{white-space:nowrap}
+.readout{position:absolute;left:12px;bottom:10px;max-width:calc(100% - 24px);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.94);border:1px solid var(--line);color:var(--ink-2);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 2px rgba(15,23,42,.06)}
 .readout:empty{display:none}
-.panel{grid-area:panel;max-height:46vh;max-height:46dvh;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px 16px;background:var(--panel);border-top:1px solid var(--line)}
-.step[hidden]{display:none}
-.lead{margin:0 0 12px;color:var(--muted);font-size:.93rem;max-width:44ch}
-.nav{grid-area:nav;display:flex;gap:10px;padding:10px 16px 12px;background:var(--panel);border-top:1px solid var(--line)}
+.panel{flex:0 1 auto;max-height:44%;overflow-y:auto;overscroll-behavior:contain;position:relative;z-index:1;contain:paint;padding:16px;background:var(--surface);border-top:1px solid var(--line)}
+.nav{flex:none;position:relative;z-index:2;display:flex;gap:10px;padding:10px 16px 12px;background:var(--surface);border-top:1px solid var(--line)}
 .nav .btn{flex:1;min-height:48px}
 .nav .btn[hidden]{display:none}
-.group+.group{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
-.group h2{margin:0 0 10px;font-size:1rem}
-.stack>*+*{margin-top:10px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.step[hidden]{display:none}
+.lead{margin:0 0 14px;color:var(--muted);font-size:.9rem}
+.stack>*+*{margin-top:12px}
+.eyebrow{margin:18px 0 8px;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.field{display:flex;flex-direction:column;gap:4px;min-width:0}
-.field>span{font-size:.85rem;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field>span{font-size:.8rem;font-weight:500;color:var(--ink-2)}
 .unit{position:relative}
-.unit input{padding-right:40px}
-.unit::after{content:attr(data-unit);position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none}
-input[type=number],select{width:100%;min-height:44px;padding:9px 11px;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:9px}
-input[type=number]:focus-visible,select:focus-visible,button:focus-visible,canvas:focus-visible,summary:focus-visible,.seg input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
-.btn{min-height:44px;padding:9px 14px;font:inherit;font-weight:700;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:9px;cursor:pointer}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.primary:hover{filter:brightness(1.07)}
+.unit input{padding-right:42px}
+.unit::after{content:attr(data-unit);position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:.82rem;color:var(--muted);pointer-events:none}
+input[type=number],select{width:100%;min-height:44px;padding:9px 12px;font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:10px;transition:border-color .15s,box-shadow .15s}
+input[type=number]:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+button:focus-visible,summary:focus-visible,canvas:focus-visible,.seg input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 14px;font:inherit;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s}
+.btn:hover{background:#F8FAFC;border-color:#94A3B8}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.soft{background:var(--accent-soft);border-color:transparent;color:var(--accent);font-weight:600}
+.btn.soft:hover{background:#E0EAFF}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:#F1F5F9}
 .btn.grow{flex:1}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.hint{margin:0;color:var(--muted);font-size:.87rem}
-.note{margin:0;color:var(--warn);font-size:.87rem}
-.note:empty{display:none}
-.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--field)}
+.hint{margin:0;font-size:.84rem;color:var(--muted)}
+.note{margin:0;padding:10px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:.84rem}
+.note:empty,.hint:empty{display:none}
+.seg{display:flex;gap:2px;padding:3px;border-radius:11px;background:#F1F5F9}
 .seg label{position:relative;flex:1}
 .seg input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
-.seg span{display:flex;align-items:center;justify-content:center;min-height:44px;padding:6px;text-align:center;font-size:.88rem;border-left:1px solid var(--line);cursor:pointer}
-.seg label:first-child span{border-left:0}
-.seg input:checked+span{background:var(--accent-soft);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
-.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.seg span{display:flex;align-items:center;justify-content:center;min-height:38px;padding:4px 6px;border-radius:8px;text-align:center;font-size:.84rem;font-weight:500;color:var(--ink-2);cursor:pointer}
+.seg input:checked+span{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.08),0 0 0 1px rgba(15,23,42,.04)}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .items:empty{display:none}
-.item{display:flex;align-items:center;gap:10px;width:100%;padding:6px;text-align:left;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:9px;cursor:pointer}
-.item[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.item img{flex:none;width:44px;height:44px;object-fit:cover;border-radius:5px;background:#fff}
+.item{display:flex;align-items:center;gap:12px;width:100%;padding:8px;text-align:left;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.item[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.item img{flex:none;width:48px;height:48px;border-radius:8px;object-fit:cover;background:#F1F5F9;border:1px solid var(--line)}
 .item div{min-width:0}
-.item b{display:block;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item small{color:var(--muted)}
-.place{display:grid;grid-template-columns:repeat(2,auto);justify-content:start;gap:18px;align-items:start}
+.item b{display:block;font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item small{font-size:.8rem;color:var(--muted)}
+.tools{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.tools .btn{padding:9px 10px}
+.tools[hidden]{display:none}
+.acc{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.acc+.acc{margin-top:10px}
+.acc summary{display:flex;align-items:center;gap:12px;min-height:60px;padding:10px 12px;list-style:none;cursor:pointer;border-radius:12px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:hover{background:#F8FAFC}
+.acc[open] summary{border-bottom:1px solid var(--line);border-radius:12px 12px 0 0}
+.acc-ico{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--accent-soft);color:var(--accent);flex:none}
+.acc-txt{flex:1;min-width:0}
+.acc-txt b{display:block;font-size:.92rem;font-weight:600}
+.acc-txt small{display:block;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc-more{display:flex;align-items:center;gap:4px;flex:none;font-size:.8rem;font-weight:600;color:var(--accent)}
+.acc-more svg{transition:transform .2s}
+.acc[open] .acc-more svg{transform:rotate(180deg)}
+.acc .show{display:inline}
+.acc .hide{display:none}
+.acc[open] .show{display:none}
+.acc[open] .hide{display:inline}
+.acc .inner{padding:14px 12px 16px}
+.place{display:flex;flex-wrap:wrap;gap:20px}
 .pad-wrap{display:flex;flex-direction:column;gap:6px}
-.pad-wrap>span{font-size:.85rem;color:var(--muted)}
+.pad-wrap>span{font-size:.8rem;font-weight:500;color:var(--ink-2)}
 .align,.pad{display:grid;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px);gap:4px}
-.align button,.pad button{display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:7px;background:var(--field);color:var(--ink);font:inherit;cursor:pointer}
-.align button::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--muted)}
-.align button:hover::before{background:var(--accent)}
-.pad button{font-size:1.05rem}
-.pad .step-size{font-size:.75rem;font-weight:700}
+.align button,.pad button{display:grid;place-items:center;padding:0;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink-2);font:inherit;cursor:pointer}
+.align button:hover,.pad button:hover{border-color:var(--accent);color:var(--accent)}
+.align button::before{content:"";width:9px;height:9px;border-radius:2px;background:currentColor;opacity:.7}
+.pad .step-size{font-size:.72rem;font-weight:600}
 .pad .gap{visibility:hidden}
-details.more{border:1px solid var(--line);border-radius:9px;background:var(--field)}
-details.more summary{min-height:44px;display:flex;align-items:center;padding:0 12px;font-weight:700;cursor:pointer}
-details.more .inner{padding:4px 12px 14px}
-.status{margin:0;min-height:1.3em;color:var(--muted);font-size:.87rem}
+.card{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.status{margin:0;min-height:1.3em;font-size:.84rem;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);z-index:30;transform:translateX(-50%);width:max-content;max-width:min(92vw,420px);padding:12px 14px;border-radius:10px;background:var(--ink);color:#fff;font-size:.88rem;box-shadow:0 8px 24px rgba(15,23,42,.25);cursor:pointer}
+.toast[hidden]{display:none}
+.cropper{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--surface)}
+.cropper[hidden]{display:none}
+.crop-head{flex:none;padding:14px 16px;border-bottom:1px solid var(--line)}
+.crop-head h2{margin:0;font-size:1rem;font-weight:600}
+.crop-head p{margin:2px 0 0;font-size:.84rem;color:var(--muted)}
+.crop-stage{flex:1 1 auto;min-height:0;display:grid;place-items:center;overflow:hidden;touch-action:none;background-color:var(--stage);background-image:radial-gradient(var(--dot) 1px,transparent 1.3px);background-size:16px 16px}
+.crop-frame{position:relative}
+.crop-frame img{display:block;width:100%;height:100%;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.crop-box{position:absolute;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(15,23,42,.45),0 0 0 1px rgba(15,23,42,.25);cursor:move;touch-action:none}
+.crop-box::before,.crop-box::after{content:"";position:absolute;pointer-events:none;border:0 solid rgba(255,255,255,.6)}
+.crop-box::before{top:0;bottom:0;left:33.333%;width:33.333%;border-left-width:1px;border-right-width:1px}
+.crop-box::after{left:0;right:0;top:33.333%;height:33.333%;border-top-width:1px;border-bottom-width:1px}
+.h{position:absolute;z-index:1;display:grid;place-items:center;width:32px;height:32px;margin:-16px 0 0 -16px;touch-action:none}
+.h::after{content:"";width:14px;height:14px;border-radius:4px;background:#fff;border:2px solid var(--accent);box-shadow:0 1px 3px rgba(15,23,42,.3)}
+.h.nw{left:0;top:0;cursor:nwse-resize}
+.h.ne{left:100%;top:0;cursor:nesw-resize}
+.h.sw{left:0;top:100%;cursor:nesw-resize}
+.h.se{left:100%;top:100%;cursor:nwse-resize}
+.crop-tools{flex:none;padding:12px 16px 4px;border-top:1px solid var(--line)}
+.crop-tools .field>span{margin-bottom:2px}
+.crop-info{margin:8px 0 0;font-size:.8rem;color:var(--muted)}
+.crop-actions{flex:none;display:flex;gap:8px;padding:10px 16px 12px}
+.crop-actions .btn{flex:1;min-height:48px}
 .print-sheet{display:none}
 .print-sheet img{display:block}
 @media (pointer:coarse){.fine-only{display:none}}
 @media (pointer:fine){.coarse-only{display:none}}
 @media (min-width:900px){
-  .app{grid-template-columns:370px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top stage" "panel stage" "nav stage"}
-  .top,.panel,.nav{border-right:1px solid var(--line)}
-  .top{padding:18px 18px 14px}
-  .top-row{margin-bottom:12px}
-  .top h1{font-size:1.45rem}
-  .panel{max-height:none;border-top:0;padding:18px}
-  .readout{left:16px;bottom:14px;font-size:.85rem}
+  .app{display:grid;grid-template-columns:390px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"top stage" "panel stage" "nav stage"}
+  .top{grid-area:top;padding:18px 20px 14px;border-right:1px solid var(--line)}
+  .stage{grid-area:stage;padding:32px 32px 60px}
+  .panel{grid-area:panel;max-height:none;padding:20px;border-top:0;border-right:1px solid var(--line)}
+  .nav{grid-area:nav;padding:12px 20px 16px;border-right:1px solid var(--line)}
+  .brand h1{font-size:1.1rem}
+  .readout{left:16px;bottom:14px;font-size:.82rem}
+  .crop-stage{padding:24px}
 }
 @media print{
   :root{padding:0}
   html,body{height:auto;overflow:visible;background:#fff}
-  .app{display:none}
+  .app,.cropper,.toast{display:none}
   .print-sheet{display:block}
 }
 </style>
@@ -148,13 +186,13 @@ details.more .inner{padding:4px 12px 14px}
 <div class="app">
   <header class="top">
     <div class="top-row">
-      <h1>Feuille pour cahier</h1>
-      <button class="btn install" id="installBtn" type="button" hidden>Installer</button>
+      <div class="brand"><img src="icon-192.png" alt=""><h1>Feuille pour cahier</h1></div>
+      <button class="btn soft install" id="installBtn" type="button" hidden>Installer</button>
     </div>
     <div class="steps" role="tablist" aria-label="Étapes">
-      <button class="tab" role="tab" id="tab-1" aria-controls="step-1" data-step="1" type="button"><span class="num">1</span><span class="lbl">Image</span></button>
-      <button class="tab" role="tab" id="tab-2" aria-controls="step-2" data-step="2" type="button"><span class="num">2</span><span class="lbl">Format</span></button>
-      <button class="tab" role="tab" id="tab-3" aria-controls="step-3" data-step="3" type="button"><span class="num">3</span><span class="lbl">Placer et imprimer</span></button>
+      <button class="tab" role="tab" id="tab-1" aria-controls="step-1" data-step="1" type="button"><span class="num"><span class="d">1</span></span><span class="lbl">Image</span></button>
+      <button class="tab" role="tab" id="tab-2" aria-controls="step-2" data-step="2" type="button"><span class="num"><span class="d">2</span></span><span class="lbl">Format</span></button>
+      <button class="tab" role="tab" id="tab-3" aria-controls="step-3" data-step="3" type="button"><span class="num"><span class="d">3</span></span><span class="lbl">Placer et imprimer</span></button>
     </div>
   </header>
 
@@ -163,7 +201,7 @@ details.more .inner{padding:4px 12px 14px}
       <canvas id="view" tabindex="0" aria-label="Aperçu de la feuille A4. Faites glisser une image pour la déplacer."></canvas>
       <div class="empty" id="empty">
         <p>Votre feuille A4. Ajoutez une image pour commencer.</p>
-        <button class="btn" id="emptyBtn" type="button">Choisir une image</button>
+        <button class="btn primary" id="emptyBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Choisir une image</button>
       </div>
     </div>
     <div class="readout" id="readout"></div>
@@ -171,15 +209,16 @@ details.more .inner{padding:4px 12px 14px}
 
   <section class="panel" id="panel">
     <div class="step" role="tabpanel" id="step-1" aria-labelledby="tab-1">
-      <p class="lead">Ajoutez l’image à coller dans le cahier.</p>
+      <p class="lead">Ajoutez l’image à coller dans le cahier, puis rognez-la si besoin.</p>
       <div class="stack">
-        <div class="row"><button class="btn primary grow" id="addBtn" type="button">Ajouter une image</button></div>
+        <button class="btn primary" id="addBtn" type="button" style="width:100%"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span id="addLbl">Ajouter une image</span></button>
         <input type="file" id="file" accept="image/*" multiple hidden>
         <p class="hint fine-only">Vous pouvez aussi déposer une image sur la feuille ou la coller avec Ctrl+V.</p>
         <ul class="items" id="items"></ul>
-        <div class="row" id="itemActions">
-          <button class="btn grow" id="dupBtn" type="button">Dupliquer</button>
-          <button class="btn grow" id="delBtn" type="button">Supprimer</button>
+        <div class="tools" id="itemActions">
+          <button class="btn soft" id="cropBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>Rogner</button>
+          <button class="btn" id="dupBtn" type="button" aria-label="Dupliquer"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+          <button class="btn" id="delBtn" type="button" aria-label="Supprimer"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
         </div>
       </div>
     </div>
@@ -193,85 +232,102 @@ details.more .inner{padding:4px 12px 14px}
           <label class="field"><span>Largeur</span><div class="unit" data-unit="mm"><input type="number" id="w" min="10" max="400" step="1" inputmode="decimal"></div></label>
           <label class="field"><span>Hauteur</span><div class="unit" data-unit="mm"><input type="number" id="h" min="10" max="400" step="1" inputmode="decimal"></div></label>
         </div>
-        <div class="seg" role="radiogroup" aria-label="Remplissage du format par l’image">
-          <label><input type="radio" name="fit" value="stretch"><span>Étirer</span></label>
-          <label><input type="radio" name="fit" value="fill"><span>Remplir et rogner</span></label>
-          <label><input type="radio" name="fit" value="fit"><span>Ajuster</span></label>
+        <div class="field">
+          <span>Remplissage</span>
+          <div class="seg" role="radiogroup" aria-label="Remplissage du format par l’image">
+            <label><input type="radio" name="fit" value="stretch"><span>Étirer</span></label>
+            <label><input type="radio" name="fit" value="fill"><span>Remplir</span></label>
+            <label><input type="radio" name="fit" value="fit"><span>Ajuster</span></label>
+          </div>
         </div>
-        <div class="row">
-          <button class="btn grow" id="swapBtn" type="button">Inverser largeur et hauteur</button>
-          <button class="btn grow" id="rotBtn" type="button">Pivoter l’image de 90°</button>
+        <div class="pair">
+          <button class="btn" id="swapBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M7 4v16M7 20l-3-3M7 20l3-3M17 20V4M17 4l-3 3M17 4l3 3"/></svg>Inverser</button>
+          <button class="btn" id="rotBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Pivoter 90°</button>
         </div>
         <p class="note" id="sizeNote" aria-live="polite"></p>
       </div>
     </div>
 
     <div class="step" role="tabpanel" id="step-3" aria-labelledby="tab-3" hidden>
-      <p class="lead"><span class="coarse-only">Faites glisser l’image avec le doigt</span><span class="fine-only">Faites glisser l’image</span> ou utilisez les commandes, puis exportez ou imprimez.</p>
-      <div class="group stack">
-        <p class="hint" id="pickNote3"></p>
-        <div class="pair">
-          <label class="field"><span>Depuis la gauche</span><div class="unit" data-unit="mm"><input type="number" id="x" step="0.5" inputmode="decimal"></div></label>
-          <label class="field"><span>Depuis le haut</span><div class="unit" data-unit="mm"><input type="number" id="y" step="0.5" inputmode="decimal"></div></label>
-        </div>
-        <div class="place">
-          <div class="pad-wrap">
-            <span>Aligner</span>
-            <div class="align" id="align">
-              <button type="button" data-ax="0" data-ay="0" aria-label="En haut à gauche"></button>
-              <button type="button" data-ax=".5" data-ay="0" aria-label="En haut au centre"></button>
-              <button type="button" data-ax="1" data-ay="0" aria-label="En haut à droite"></button>
-              <button type="button" data-ax="0" data-ay=".5" aria-label="Au milieu à gauche"></button>
-              <button type="button" data-ax=".5" data-ay=".5" aria-label="Au centre"></button>
-              <button type="button" data-ax="1" data-ay=".5" aria-label="Au milieu à droite"></button>
-              <button type="button" data-ax="0" data-ay="1" aria-label="En bas à gauche"></button>
-              <button type="button" data-ax=".5" data-ay="1" aria-label="En bas au centre"></button>
-              <button type="button" data-ax="1" data-ay="1" aria-label="En bas à droite"></button>
-            </div>
-          </div>
-          <div class="pad-wrap">
-            <span>Déplacer</span>
-            <div class="pad" id="pad">
-              <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
-              <button type="button" data-dx="0" data-dy="-1" aria-label="Monter">↑</button>
-              <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
-              <button type="button" data-dx="-1" data-dy="0" aria-label="Vers la gauche">←</button>
-              <button type="button" class="step-size" id="stepSize" aria-label="Pas de déplacement : 1 mm">1 mm</button>
-              <button type="button" data-dx="1" data-dy="0" aria-label="Vers la droite">→</button>
-              <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
-              <button type="button" data-dx="0" data-dy="1" aria-label="Descendre">↓</button>
-              <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
-            </div>
-          </div>
-        </div>
-        <p class="hint fine-only">Les flèches du clavier déplacent de 1 mm, Maj + flèche de 10 mm.</p>
-      </div>
+      <p class="lead"><span class="coarse-only">Faites glisser l’image avec le doigt</span><span class="fine-only">Faites glisser l’image</span> pour la placer, puis exportez ou imprimez.</p>
+      <p class="hint" id="pickNote3"></p>
 
-      <div class="group stack">
-        <details class="more">
-          <summary>Réglages de la feuille</summary>
-          <div class="inner stack">
+      <p class="eyebrow">Options</p>
+      <details class="acc" id="posAcc">
+        <summary>
+          <span class="acc-ico"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/></svg></span>
+          <span class="acc-txt"><b>Position précise</b><small id="posSummary">Aligner et déplacer au millimètre</small></span>
+          <span class="acc-more"><span class="show">Afficher</span><span class="hide">Masquer</span><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="inner stack">
+          <div class="pair">
+            <label class="field"><span>Depuis la gauche</span><div class="unit" data-unit="mm"><input type="number" id="x" step="0.5" inputmode="decimal"></div></label>
+            <label class="field"><span>Depuis le haut</span><div class="unit" data-unit="mm"><input type="number" id="y" step="0.5" inputmode="decimal"></div></label>
+          </div>
+          <div class="place">
+            <div class="pad-wrap">
+              <span>Aligner</span>
+              <div class="align" id="align">
+                <button type="button" data-ax="0" data-ay="0" aria-label="En haut à gauche"></button>
+                <button type="button" data-ax=".5" data-ay="0" aria-label="En haut au centre"></button>
+                <button type="button" data-ax="1" data-ay="0" aria-label="En haut à droite"></button>
+                <button type="button" data-ax="0" data-ay=".5" aria-label="Au milieu à gauche"></button>
+                <button type="button" data-ax=".5" data-ay=".5" aria-label="Au centre"></button>
+                <button type="button" data-ax="1" data-ay=".5" aria-label="Au milieu à droite"></button>
+                <button type="button" data-ax="0" data-ay="1" aria-label="En bas à gauche"></button>
+                <button type="button" data-ax=".5" data-ay="1" aria-label="En bas au centre"></button>
+                <button type="button" data-ax="1" data-ay="1" aria-label="En bas à droite"></button>
+              </div>
+            </div>
+            <div class="pad-wrap">
+              <span>Déplacer</span>
+              <div class="pad" id="pad">
+                <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
+                <button type="button" data-dx="0" data-dy="-1" aria-label="Monter"><svg class="i" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></button>
+                <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
+                <button type="button" data-dx="-1" data-dy="0" aria-label="Vers la gauche"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+                <button type="button" class="step-size" id="stepSize" aria-label="Pas de déplacement : 1 mm">1 mm</button>
+                <button type="button" data-dx="1" data-dy="0" aria-label="Vers la droite"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+                <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
+                <button type="button" data-dx="0" data-dy="1" aria-label="Descendre"><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+                <button type="button" class="gap" tabindex="-1" aria-hidden="true"></button>
+              </div>
+            </div>
+          </div>
+          <p class="hint fine-only">Les flèches du clavier déplacent de 1 mm, Maj + flèche de 10 mm.</p>
+        </div>
+      </details>
+
+      <details class="acc" id="sheetAcc">
+        <summary>
+          <span class="acc-ico"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+          <span class="acc-txt"><b>Feuille et découpe</b><small id="sheetSummary"></small></span>
+          <span class="acc-more"><span class="show">Afficher</span><span class="hide">Masquer</span><svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+        </summary>
+        <div class="inner stack">
+          <div class="field">
+            <span>Orientation</span>
             <div class="seg" role="radiogroup" aria-label="Orientation de la feuille">
               <label><input type="radio" name="orient" value="portrait"><span>A4 portrait</span></label>
               <label><input type="radio" name="orient" value="landscape"><span>A4 paysage</span></label>
             </div>
-            <div class="pair">
-              <label class="field"><span>Marge imprimante</span><div class="unit" data-unit="mm"><input type="number" id="margin" min="0" max="30" step="0.5" inputmode="decimal"></div></label>
-              <label class="field"><span>Repères de coupe</span>
-                <select id="guide">
-                  <option value="marks">Traits de coupe</option>
-                  <option value="outline">Contour pointillé</option>
-                  <option value="none">Aucun</option>
-                </select>
-              </label>
-            </div>
-            <p class="hint">Les images restent dans la marge pour que l’imprimante ne les coupe jamais.</p>
           </div>
-        </details>
-      </div>
+          <div class="pair">
+            <label class="field"><span>Marge imprimante</span><div class="unit" data-unit="mm"><input type="number" id="margin" min="0" max="30" step="0.5" inputmode="decimal"></div></label>
+            <label class="field"><span>Repères de coupe</span>
+              <select id="guide">
+                <option value="marks">Traits de coupe</option>
+                <option value="outline">Contour pointillé</option>
+                <option value="none">Aucun</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">Les images restent dans la marge pour que l’imprimante ne les coupe jamais.</p>
+        </div>
+      </details>
 
-      <div class="group stack">
-        <h2>Sortie</h2>
+      <p class="eyebrow">Sortie</p>
+      <div class="card stack">
         <label class="field"><span>Résolution du PNG</span>
           <select id="dpi">
             <option value="150">150 DPI, fichier léger</option>
@@ -279,7 +335,7 @@ details.more .inner{padding:4px 12px 14px}
             <option value="600">600 DPI, très net</option>
           </select>
         </label>
-        <div class="row"><button class="btn grow" id="printBtn" type="button">Imprimer depuis le navigateur</button></div>
+        <button class="btn" id="printBtn" type="button" style="width:100%"><svg class="i" viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>Imprimer depuis le navigateur</button>
         <p class="hint">Imprimez le PNG en taille réelle (100 %), pas en « ajuster à la page », pour garder le format exact du cahier.</p>
         <p class="status" id="status" aria-live="polite"></p>
       </div>
@@ -291,6 +347,38 @@ details.more .inner{padding:4px 12px 14px}
     <button class="btn primary" id="nextBtn" type="button">Suivant</button>
   </footer>
 </div>
+
+<div class="cropper" id="cropper" role="dialog" aria-modal="true" aria-labelledby="cropTitle" hidden>
+  <div class="crop-head">
+    <h2 id="cropTitle">Rogner l’image</h2>
+    <p>Faites glisser le cadre ou ses coins.</p>
+  </div>
+  <div class="crop-stage" id="cropStage">
+    <div class="crop-frame" id="cropFrame">
+      <img id="cropImg" alt="">
+      <div class="crop-box" id="cropBox">
+        <span class="h nw" data-h="nw"></span><span class="h ne" data-h="ne"></span><span class="h sw" data-h="sw"></span><span class="h se" data-h="se"></span>
+      </div>
+    </div>
+  </div>
+  <div class="crop-tools">
+    <div class="field">
+      <span>Proportions</span>
+      <div class="seg" role="radiogroup" aria-label="Proportions du cadre">
+        <label><input type="radio" name="ratio" value="free"><span>Libre</span></label>
+        <label><input type="radio" name="ratio" value="sheet"><span>Format du cahier</span></label>
+        <label><input type="radio" name="ratio" value="orig"><span>Originales</span></label>
+      </div>
+    </div>
+    <p class="crop-info" id="cropInfo"></p>
+  </div>
+  <div class="crop-actions">
+    <button class="btn ghost" id="cropCancel" type="button">Annuler</button>
+    <button class="btn" id="cropReset" type="button">Réinitialiser</button>
+    <button class="btn primary" id="cropApply" type="button">Appliquer</button>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="print-sheet" id="printSheet"><img id="printImg" alt=""></div>
 
@@ -303,6 +391,7 @@ details.more .inner{padding:4px 12px 14px}
     { id: 'large', w: 210, h: 297, label: 'Grand cahier (21 × 29,7 cm)' },
     { id: 'custom', label: 'Format personnalisé' }
   ];
+  const GUIDE_LABELS = { marks: 'traits de coupe', outline: 'contour pointillé', none: 'sans repères' };
   const PREF_KEY = 'copybook-sheet-prefs';
   const prefs = { orient: 'portrait', margin: 5, guide: 'marks', dpi: 300, w: 170, h: 220, fit: 'stretch' };
   try { Object.assign(prefs, JSON.parse(localStorage.getItem(PREF_KEY) || '{}')); } catch (e) {}
@@ -327,6 +416,7 @@ details.more .inner{padding:4px 12px 14px}
   const fr = n => fmt(n).replace('.', ',');
   const sheetDims = () => prefs.orient === 'portrait' ? [210, 297] : [297, 210];
   const setStatus = t => { statusEl.textContent = t; };
+  const srcRect = it => it.crop || { x: 0, y: 0, w: it.img.naturalWidth, h: it.img.naturalHeight };
 
   function clamp(it) {
     const [W, H] = sheetDims();
@@ -341,6 +431,21 @@ details.more .inner{padding:4px 12px 14px}
     it.x = (W - it.w) / 2;
     it.y = (H - it.h) / 2;
     clamp(it);
+  }
+
+  function makeThumb(it) {
+    const size = 96;
+    const c = document.createElement('canvas');
+    c.width = size; c.height = size;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, size, size);
+    const r = srcRect(it);
+    const s = Math.max(size / r.w, size / r.h);
+    const dw = r.w * s, dh = r.h * s;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(it.img, r.x, r.y, r.w, r.h, (size - dw) / 2, (size - dh) / 2, dw, dh);
+    it.thumb = c.toDataURL('image/jpeg', 0.85);
   }
 
   function loadImage(file) {
@@ -359,7 +464,8 @@ details.more .inner{padding:4px 12px 14px}
     for (const f of list) {
       try {
         const img = await loadImage(f);
-        const it = { id: ++seq, img, name: f.name || fallbackName || 'Image', w: prefs.w, h: prefs.h, fit: prefs.fit, rot: 0, x: 0, y: 0 };
+        const it = { id: ++seq, img, name: f.name || fallbackName || 'Image', w: prefs.w, h: prefs.h, fit: prefs.fit, rot: 0, x: 0, y: 0, crop: null, thumb: '' };
+        makeThumb(it);
         centerItem(it);
         if (items.length) { it.x += 6 * (items.length % 4); it.y += 6 * (items.length % 4); clamp(it); }
         items.push(it);
@@ -372,9 +478,9 @@ details.more .inner{padding:4px 12px 14px}
 
   function drawItem(ctx, it, k) {
     const bx = it.x * k, by = it.y * k, bw = it.w * k, bh = it.h * k;
-    const iw = it.img.naturalWidth, ih = it.img.naturalHeight;
+    const r = srcRect(it);
     const turned = it.rot % 180 !== 0;
-    const ew = turned ? ih : iw, eh = turned ? iw : ih;
+    const ew = turned ? r.h : r.w, eh = turned ? r.w : r.h;
     let tw = bw, th = bh;
     if (it.fit !== 'stretch') {
       const s = it.fit === 'fill' ? Math.max(bw / ew, bh / eh) : Math.min(bw / ew, bh / eh);
@@ -389,7 +495,7 @@ details.more .inner{padding:4px 12px 14px}
     ctx.rotate(it.rot * Math.PI / 180);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(it.img, -dw / 2, -dh / 2, dw, dh);
+    ctx.drawImage(it.img, r.x, r.y, r.w, r.h, -dw / 2, -dh / 2, dw, dh);
     ctx.restore();
   }
 
@@ -420,7 +526,7 @@ details.more .inner{padding:4px 12px 14px}
     if (preview && prefs.margin > 0) {
       const m = prefs.margin * k;
       ctx.save();
-      ctx.strokeStyle = 'rgba(30,111,217,.45)';
+      ctx.strokeStyle = 'rgba(37,99,235,.35)';
       ctx.setLineDash([4, 4]);
       ctx.lineWidth = 1;
       ctx.strokeRect(m + .5, m + .5, W * k - 2 * m - 1, H * k - 2 * m - 1);
@@ -430,7 +536,7 @@ details.more .inner{padding:4px 12px 14px}
     if (prefs.guide !== 'none') items.forEach(it => drawGuide(ctx, it, k, preview));
     if (preview && sel) {
       ctx.save();
-      ctx.strokeStyle = '#1E6FD9';
+      ctx.strokeStyle = '#2563EB';
       ctx.lineWidth = 2;
       ctx.strokeRect(sel.x * k - 1, sel.y * k - 1, sel.w * k + 2, sel.h * k + 2);
       ctx.restore();
@@ -449,8 +555,8 @@ details.more .inner{padding:4px 12px 14px}
   function layout() {
     const [W, H] = sheetDims();
     const wide = window.innerWidth >= 900;
-    const aw = Math.max(stage.clientWidth - (wide ? 56 : 24), 80);
-    const ah = Math.max(stage.clientHeight - (wide ? 84 : 44), 80);
+    const aw = Math.max(stage.clientWidth - (wide ? 64 : 24), 80);
+    const ah = Math.max(stage.clientHeight - (wide ? 92 : 54), 80);
     const k = Math.min(aw / W, ah / H);
     const cw = Math.floor(W * k), ch = Math.floor(H * k);
     viewK = cw / W;
@@ -479,9 +585,9 @@ details.more .inner{padding:4px 12px 14px}
       msgs.push('Ce format dépasse la zone imprimable : l’imprimante risque d’en couper les bords. Essayez l’A4 paysage ou une marge plus petite à l’étape 3.');
     }
     if (sel.fit === 'stretch') {
-      const turned = sel.rot % 180 !== 0;
-      const ir = turned ? sel.img.naturalHeight / sel.img.naturalWidth : sel.img.naturalWidth / sel.img.naturalHeight;
-      if (Math.abs(ir / (sel.w / sel.h) - 1) > 0.03) msgs.push('Les proportions de l’image ne correspondent pas à ce format : elle sera déformée. Choisissez Remplir et rogner pour garder ses proportions.');
+      const r = srcRect(sel);
+      const ir = sel.rot % 180 !== 0 ? r.h / r.w : r.w / r.h;
+      if (Math.abs(ir / (sel.w / sel.h) - 1) > 0.03) msgs.push('Les proportions de l’image ne correspondent pas à ce format : elle sera déformée. Choisissez Remplir, ou rognez l’image au format du cahier à l’étape 1.');
     }
     note.textContent = msgs.join(' ');
   }
@@ -490,6 +596,11 @@ details.more .inner{padding:4px 12px 14px}
     if (!sel) return;
     $('#x').value = fmt(sel.x);
     $('#y').value = fmt(sel.y);
+    $('#posSummary').textContent = `À ${fr(sel.x)} mm de la gauche, ${fr(sel.y)} mm du haut`;
+  }
+
+  function syncSheetSummary() {
+    $('#sheetSummary').textContent = `A4 ${prefs.orient === 'portrait' ? 'portrait' : 'paysage'}, marge ${fr(prefs.margin)} mm, ${GUIDE_LABELS[prefs.guide]}`;
   }
 
   function syncNav() {
@@ -508,11 +619,9 @@ details.more .inner{padding:4px 12px 14px}
     back.hidden = step === 1;
     next.textContent = step === 1 ? 'Suivant : format' : step === 2 ? 'Suivant : placer et imprimer' : 'Exporter en PNG';
     next.disabled = !has;
-    const pick = items.length > 1 ? `Modification de « ${sel ? sel.name : ''} ». Touchez une autre image sur la feuille pour la modifier.` : '';
+    const pick = items.length > 1 && sel ? `Modification de « ${sel.name} ». Touchez une autre image sur la feuille pour la modifier.` : '';
     $('#pickNote2').textContent = pick;
     $('#pickNote3').textContent = pick;
-    $('#pickNote2').hidden = !pick;
-    $('#pickNote3').hidden = !pick;
   }
 
   function goStep(n) {
@@ -528,7 +637,8 @@ details.more .inner{padding:4px 12px 14px}
     const has = !!sel;
     $('#itemActions').hidden = !items.length;
     $('#empty').hidden = items.length > 0;
-    $('#addBtn').textContent = items.length ? 'Ajouter une autre image' : 'Ajouter une image';
+    $('#addLbl').textContent = items.length ? 'Ajouter une autre image' : 'Ajouter une image';
+    $('#addBtn').classList.toggle('primary', !items.length);
 
     const ul = $('#items');
     ul.textContent = '';
@@ -539,13 +649,13 @@ details.more .inner{padding:4px 12px 14px}
       b.className = 'item';
       b.setAttribute('aria-pressed', String(it === sel));
       const img = document.createElement('img');
-      img.src = it.img.src;
+      img.src = it.thumb;
       img.alt = '';
       const d = document.createElement('div');
       const n = document.createElement('b');
       n.textContent = it.name;
       const s = document.createElement('small');
-      s.textContent = `${fr(it.w / 10)} × ${fr(it.h / 10)} cm`;
+      s.textContent = `${fr(it.w / 10)} × ${fr(it.h / 10)} cm${it.crop ? ', rognée' : ''}`;
       d.append(n, s);
       b.append(img, d);
       b.addEventListener('click', () => { sel = it; sync(); render(); });
@@ -560,6 +670,7 @@ details.more .inner{padding:4px 12px 14px}
     const fit = has ? sel.fit : prefs.fit;
     document.querySelectorAll('input[name=fit]').forEach(r => { r.checked = r.value === fit; });
     syncPos();
+    syncSheetSummary();
     updateNotes();
     syncNav();
   }
@@ -593,6 +704,150 @@ details.more .inner{padding:4px 12px 14px}
     }
     return null;
   }
+
+  const cropper = $('#cropper'), cropStage = $('#cropStage'), cropFrame = $('#cropFrame'), cropBox = $('#cropBox'), cropImg = $('#cropImg');
+  let cropIt = null, crop = null, cropRatio = 'free', cropS = 1, cropDrag = null;
+
+  const natSize = it => ({ w: it.img.naturalWidth, h: it.img.naturalHeight });
+
+  function ratioValue() {
+    if (!cropIt) return null;
+    if (cropRatio === 'sheet') return cropIt.rot % 180 !== 0 ? cropIt.h / cropIt.w : cropIt.w / cropIt.h;
+    if (cropRatio === 'orig') { const n = natSize(cropIt); return n.w / n.h; }
+    return null;
+  }
+
+  function drawCropBox() {
+    cropBox.style.left = crop.x * cropS + 'px';
+    cropBox.style.top = crop.y * cropS + 'px';
+    cropBox.style.width = crop.w * cropS + 'px';
+    cropBox.style.height = crop.h * cropS + 'px';
+    $('#cropInfo').textContent = `Zone conservée : ${Math.round(crop.w)} × ${Math.round(crop.h)} px`;
+  }
+
+  function layoutCrop() {
+    if (cropper.hidden || !cropIt) return;
+    const n = natSize(cropIt);
+    const pad = window.innerWidth >= 900 ? 48 : 40;
+    const aw = Math.max(cropStage.clientWidth - pad, 60), ah = Math.max(cropStage.clientHeight - pad, 60);
+    cropS = Math.min(aw / n.w, ah / n.h);
+    cropFrame.style.width = Math.round(n.w * cropS) + 'px';
+    cropFrame.style.height = Math.round(n.h * cropS) + 'px';
+    drawCropBox();
+  }
+
+  function applyRatio() {
+    const r = ratioValue();
+    if (!r) return;
+    const n = natSize(cropIt);
+    const w = Math.min(n.w, n.h * r), h = w / r;
+    const cx = crop.x + crop.w / 2, cy = crop.y + crop.h / 2;
+    crop = { x: Math.min(Math.max(cx - w / 2, 0), n.w - w), y: Math.min(Math.max(cy - h / 2, 0), n.h - h), w, h };
+    drawCropBox();
+  }
+
+  function setRatioRadios() {
+    document.querySelectorAll('input[name=ratio]').forEach(r => { r.checked = r.value === cropRatio; });
+  }
+
+  function openCrop() {
+    if (!sel) return;
+    cropIt = sel;
+    const n = natSize(cropIt);
+    crop = cropIt.crop ? { ...cropIt.crop } : { x: 0, y: 0, w: n.w, h: n.h };
+    cropRatio = 'free';
+    setRatioRadios();
+    cropImg.src = cropIt.img.src;
+    cropper.hidden = false;
+    requestAnimationFrame(layoutCrop);
+    $('#cropApply').focus({ preventScroll: true });
+  }
+
+  function closeCrop() {
+    cropper.hidden = true;
+    cropIt = null;
+    cropDrag = null;
+    $('#cropBtn').focus({ preventScroll: true });
+  }
+
+  function cropPoint(e) {
+    const r = cropFrame.getBoundingClientRect();
+    return { x: (e.clientX - r.left) / cropS, y: (e.clientY - r.top) / cropS };
+  }
+
+  cropStage.addEventListener('pointerdown', e => {
+    if (!cropIt) return;
+    const handle = e.target.closest('.h');
+    const inBox = e.target.closest('#cropBox');
+    if (!handle && !inBox) return;
+    e.preventDefault();
+    const p = cropPoint(e);
+    if (handle) {
+      const hd = handle.dataset.h;
+      const sx = hd.includes('w') ? -1 : 1, sy = hd.includes('n') ? -1 : 1;
+      cropDrag = { mode: 'resize', sx, sy, ax: sx < 0 ? crop.x + crop.w : crop.x, ay: sy < 0 ? crop.y + crop.h : crop.y };
+    } else {
+      cropDrag = { mode: 'move', px: p.x, py: p.y, cx: crop.x, cy: crop.y };
+    }
+    cropStage.setPointerCapture(e.pointerId);
+  });
+
+  cropStage.addEventListener('pointermove', e => {
+    if (!cropDrag) return;
+    const p = cropPoint(e);
+    const n = natSize(cropIt);
+    if (cropDrag.mode === 'move') {
+      crop.x = Math.min(Math.max(cropDrag.cx + p.x - cropDrag.px, 0), n.w - crop.w);
+      crop.y = Math.min(Math.max(cropDrag.cy + p.y - cropDrag.py, 0), n.h - crop.h);
+      drawCropBox();
+      return;
+    }
+    const { sx, sy, ax, ay } = cropDrag;
+    const dx = (p.x - ax) * sx, dy = (p.y - ay) * sy;
+    const maxW = sx < 0 ? ax : n.w - ax, maxH = sy < 0 ? ay : n.h - ay;
+    const minSz = Math.min(24 / cropS, maxW, maxH);
+    const r = ratioValue();
+    let w, h;
+    if (r) {
+      w = Math.max(dx, dy * r);
+      w = Math.min(w, maxW, maxH * r);
+      w = Math.max(w, Math.min(minSz, maxW, maxH * r));
+      h = w / r;
+    } else {
+      w = Math.min(Math.max(dx, minSz), maxW);
+      h = Math.min(Math.max(dy, minSz), maxH);
+    }
+    crop = { x: sx < 0 ? ax - w : ax, y: sy < 0 ? ay - h : ay, w, h };
+    drawCropBox();
+  });
+
+  const endCropDrag = () => { cropDrag = null; };
+  cropStage.addEventListener('pointerup', endCropDrag);
+  cropStage.addEventListener('pointercancel', endCropDrag);
+
+  document.querySelectorAll('input[name=ratio]').forEach(r => r.addEventListener('change', () => {
+    cropRatio = r.value;
+    applyRatio();
+  }));
+
+  $('#cropCancel').addEventListener('click', closeCrop);
+  $('#cropReset').addEventListener('click', () => {
+    const n = natSize(cropIt);
+    crop = { x: 0, y: 0, w: n.w, h: n.h };
+    cropRatio = 'free';
+    setRatioRadios();
+    drawCropBox();
+  });
+  $('#cropApply').addEventListener('click', () => {
+    const n = natSize(cropIt);
+    const full = crop.x < 0.5 && crop.y < 0.5 && Math.abs(crop.w - n.w) < 1 && Math.abs(crop.h - n.h) < 1;
+    cropIt.crop = full ? null : { x: Math.round(crop.x), y: Math.round(crop.y), w: Math.max(1, Math.round(crop.w)), h: Math.max(1, Math.round(crop.h)) };
+    makeThumb(cropIt);
+    closeCrop();
+    sync();
+    render();
+  });
+  $('#cropBtn').addEventListener('click', openCrop);
 
   const CRC = (() => {
     const t = new Uint32Array(256);
@@ -820,13 +1075,14 @@ details.more .inner{padding:4px 12px 14px}
     savePrefs();
     items.forEach(clamp);
     syncPos();
+    syncSheetSummary();
     updateNotes();
     render();
   });
 
   const guideEl = $('#guide');
   guideEl.value = prefs.guide;
-  guideEl.addEventListener('change', () => { prefs.guide = guideEl.value; savePrefs(); render(); });
+  guideEl.addEventListener('change', () => { prefs.guide = guideEl.value; savePrefs(); syncSheetSummary(); render(); });
 
   const dpiEl = $('#dpi');
   dpiEl.value = String(prefs.dpi);
@@ -838,7 +1094,7 @@ details.more .inner{padding:4px 12px 14px}
 
   $('#dupBtn').addEventListener('click', () => {
     if (!sel) return;
-    const it = { ...sel, id: ++seq, x: sel.x + 8, y: sel.y + 8 };
+    const it = { ...sel, id: ++seq, x: sel.x + 8, y: sel.y + 8, crop: sel.crop ? { ...sel.crop } : null };
     clamp(it);
     items.push(it);
     sel = it;
@@ -884,6 +1140,10 @@ details.more .inner{padding:4px 12px 14px}
   view.addEventListener('pointercancel', endDrag);
 
   document.addEventListener('keydown', e => {
+    if (!cropper.hidden) {
+      if (e.key === 'Escape') closeCrop();
+      return;
+    }
     if (!sel || e.target.closest('input,select,textarea,[role=tab]')) return;
     const s = e.shiftKey ? 10 : 1;
     const moves = { ArrowLeft: [-s, 0], ArrowRight: [s, 0], ArrowUp: [0, -s], ArrowDown: [0, s] };
@@ -899,6 +1159,7 @@ details.more .inner{padding:4px 12px 14px}
   });
 
   document.addEventListener('paste', e => {
+    if (!cropper.hidden) return;
     const files = [...(e.clipboardData ? e.clipboardData.items : [])]
       .filter(i => i.type.startsWith('image/'))
       .map(i => i.getAsFile())
@@ -954,6 +1215,7 @@ details.more .inner{padding:4px 12px 14px}
   }
 
   new ResizeObserver(layout).observe(stage);
+  new ResizeObserver(layoutCrop).observe(cropStage);
   window.addEventListener('resize', layout);
   sync();
   layout();
